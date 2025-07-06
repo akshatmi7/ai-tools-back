@@ -1,14 +1,12 @@
-# Step 1: Use an official Java 17 image
-FROM eclipse-temurin:17-jdk
-
-# Step 2: Set the working directory inside the container
+# Step 1: Build the application
+FROM eclipse-temurin:17-jdk AS build
 WORKDIR /app
+COPY . .
+RUN ./mvnw package -DskipTests
 
-# Step 3: Copy the JAR file (you will create this in step 2)
-COPY build/libs/*.jar app.jar
-
-# Step 4: Expose port 8080 to make your app accessible
+# Step 2: Run the application
+FROM eclipse-temurin:17-jdk
+WORKDIR /app
+COPY --from=build /app/target/*.jar app.jar
 EXPOSE 8080
-
-# Step 5: Start the Spring Boot app
 ENTRYPOINT ["java", "-jar", "app.jar"]
