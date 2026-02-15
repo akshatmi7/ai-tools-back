@@ -21,10 +21,8 @@ public class AITool {
     @Column(columnDefinition = "TEXT")
     private String fullDescription;
 
-    @Lob
     @Column(columnDefinition = "TEXT")
     private String researchText;
-
 
     private String iconUrl;
     private String website;

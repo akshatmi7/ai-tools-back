@@ -37,10 +37,4 @@ public class AIToolController {
         return ResponseEntity.ok(service.addTool(tool));
     }
 
-    @PostMapping("/{slug}/regenerate")
-    public ResponseEntity<AITool> regenerateResearch(@PathVariable String slug) {
-        return ResponseEntity.ok(service.regenerateResearch(slug));
-    }
-
-
 }

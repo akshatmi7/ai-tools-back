@@ -28,8 +28,12 @@ public class JwtUtil {
     }
 
     public String getEmailFromToken(String token) {
-        Claims claims = Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token).getBody();
-        return claims.getSubject();
+        try {
+            Claims claims = Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token).getBody();
+            return claims.getSubject();
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     public boolean validateToken(String token) {
@@ -40,4 +44,4 @@ public class JwtUtil {
             return false;
         }
     }
-} 
+}
