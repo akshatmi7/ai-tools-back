@@ -7,44 +7,42 @@ import org.springframework.cache.caffeine.CaffeineCacheManager;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import java.util.concurrent.TimeUnit;
+import java.time.Duration;
 
 /**
- * Enterprise-grade cache configuration using Caffeine.
- * Provides in-memory caching for frequently accessed data to reduce database
- * load.
+ * Enterprise-grade Spring Cache configuration with Caffeine.
+ * Service-layer caching (NOT Hibernate cache) - cloud-native pattern.
  */
 @Configuration
 @EnableCaching
 public class CacheConfig {
 
     /**
-     * Configure Caffeine-based cache manager with optimized settings.
+     * Caffeine cache configuration with production-optimized settings.
      * 
-     * Cache Specifications:
-     * - aitools: 1 hour TTL, max 1000 entries
-     * - articles: 30 minutes TTL, max 500 entries
-     * - tool-by-slug: 1 hour TTL, max 500 entries
+     * Settings:
+     * - Initial capacity: 50 (prevents resizing overhead)
+     * - Maximum size: 500 entries (memory-efficient)
+     * - TTL: 10 minutes (balances freshness vs performance)
+     * - Stats recording: enabled (for monitoring)
      */
     @Bean
-    public CacheManager cacheManager() {
-        CaffeineCacheManager cacheManager = new CaffeineCacheManager("aitools", "articles", "tool-by-slug");
-        cacheManager.setCaffeine(caffeineCacheBuilder());
-        return cacheManager;
+    public Caffeine<Object, Object> caffeineConfig() {
+        return Caffeine.newBuilder()
+                .initialCapacity(50)
+                .maximumSize(500)
+                .expireAfterWrite(Duration.ofMinutes(10))
+                .recordStats(); // Enable for /actuator/caches metrics
     }
 
     /**
-     * Caffeine cache builder with production-optimized settings.
-     * 
-     * Configuration:
-     * - Maximum size: 1000 entries (prevents memory overflow)
-     * - TTL: 1 hour (balances freshness vs performance)
-     * - Metrics: Enabled for monitoring cache hit rates
+     * Spring Cache Manager using Caffeine.
+     * Manages caches: aitools, articles, tool-by-slug
      */
-    private Caffeine<Object, Object> caffeineCacheBuilder() {
-        return Caffeine.newBuilder()
-                .maximumSize(1000)
-                .expireAfterWrite(1, TimeUnit.HOURS)
-                .recordStats(); // Enable metrics for monitoring
+    @Bean
+    public CacheManager cacheManager(Caffeine<Object, Object> caffeine) {
+        CaffeineCacheManager manager = new CaffeineCacheManager("aitools", "articles", "tool-by-slug");
+        manager.setCaffeine(caffeine);
+        return manager;
     }
 }
