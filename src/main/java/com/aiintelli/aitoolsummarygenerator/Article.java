@@ -5,6 +5,9 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
+@Table(name = "article", indexes = {
+        @Index(name = "idx_created_at", columnList = "createdAt")
+})
 public class Article {
 
     @Id
@@ -26,7 +29,8 @@ public class Article {
 
     // Constructors, Getters & Setters
 
-    public Article() {}
+    public Article() {
+    }
 
     public Article(String title, String summary, String imageUrl) {
         this.title = title;

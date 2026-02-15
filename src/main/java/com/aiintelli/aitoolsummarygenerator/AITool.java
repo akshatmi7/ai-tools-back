@@ -6,6 +6,10 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
+@Table(name = "aitool", indexes = {
+        @Index(name = "idx_slug", columnList = "slug"),
+        @Index(name = "idx_name", columnList = "name")
+})
 public class AITool {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
