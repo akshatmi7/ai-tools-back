@@ -24,6 +24,11 @@ public class AIToolController {
 
     @GetMapping
     public ResponseEntity<List<AITool>> getAll() {
+        long start = System.currentTimeMillis();
+        // existing code
+        long end = System.currentTimeMillis();
+        System.out.println("Time taken: " + (end - start) + " ms");
+
         return ResponseEntity.ok(service.getAllTools());
     }
 

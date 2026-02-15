@@ -1,9 +1,6 @@
 package com.aiintelli.aitoolsummarygenerator;
+
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -33,41 +30,50 @@ public class AITool {
     private LocalDateTime createdAt = LocalDateTime.now();
     private LocalDateTime updatedAt = LocalDateTime.now();
 
-    @OneToMany(mappedBy = "tool", cascade = CascadeType.ALL)
-    private List<HowToUseStep> howToUseSteps;
-
-    @OneToMany(mappedBy = "tool", cascade = CascadeType.ALL)
-    private List<Pros> pros;
-
-    @OneToMany(mappedBy = "tool", cascade = CascadeType.ALL)
-    private List<Cons> cons;
-
-    @OneToMany(mappedBy = "tool", cascade = CascadeType.ALL)
-    private List<FAQ> faqs;
+    // COMMENTED OUT - Not needed for current frontend functionality
+    /*
+     * @OneToMany(mappedBy = "tool", cascade = CascadeType.ALL)
+     * private List<HowToUseStep> howToUseSteps;
+     * 
+     * @OneToMany(mappedBy = "tool", cascade = CascadeType.ALL)
+     * private List<Pros> pros;
+     * 
+     * @OneToMany(mappedBy = "tool", cascade = CascadeType.ALL)
+     * private List<Cons> cons;
+     * 
+     * @OneToMany(mappedBy = "tool", cascade = CascadeType.ALL)
+     * private List<FAQ> faqs;
+     */
 
     // Getters and Setters
-
 
     public AITool() {
     }
 
-    public AITool(Long id, String name, String slug, String category, String description, String fullDescription, String researchText, String iconUrl, String website, LocalDateTime createdAt, LocalDateTime updatedAt, List<HowToUseStep> howToUseSteps, List<Pros> pros, List<Cons> cons, List<FAQ> faqs) {
-        this.id = id;
-        this.name = name;
-        this.slug = slug;
-        this.category = category;
-        this.description = description;
-        this.fullDescription = fullDescription;
-        this.researchText = researchText;
-        this.iconUrl = iconUrl;
-        this.website = website;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
-        this.howToUseSteps = howToUseSteps;
-        this.pros = pros;
-        this.cons = cons;
-        this.faqs = faqs;
-    }
+    // COMMENTED OUT - Constructor with related entities not needed
+    /*
+     * public AITool(Long id, String name, String slug, String category, String
+     * description, String fullDescription, String researchText, String iconUrl,
+     * String website, LocalDateTime createdAt, LocalDateTime updatedAt,
+     * List<HowToUseStep> howToUseSteps, List<Pros> pros, List<Cons> cons, List<FAQ>
+     * faqs) {
+     * this.id = id;
+     * this.name = name;
+     * this.slug = slug;
+     * this.category = category;
+     * this.description = description;
+     * this.fullDescription = fullDescription;
+     * this.researchText = researchText;
+     * this.iconUrl = iconUrl;
+     * this.website = website;
+     * this.createdAt = createdAt;
+     * this.updatedAt = updatedAt;
+     * this.howToUseSteps = howToUseSteps;
+     * this.pros = pros;
+     * this.cons = cons;
+     * this.faqs = faqs;
+     * }
+     */
 
     public Long getId() {
         return id;
@@ -126,7 +132,23 @@ public class AITool {
     }
 
     public String getIconUrl() {
-        return iconUrl;
+        if (this.iconUrl != null && !this.iconUrl.isEmpty()) {
+            return this.iconUrl;
+        }
+        if (this.website != null && !this.website.isEmpty()) {
+            try {
+                String domain = this.website;
+                if (domain.startsWith("http://") || domain.startsWith("https://")) {
+                    java.net.URI uri = new java.net.URI(domain);
+                    domain = uri.getHost();
+                }
+                return "https://www.google.com/s2/favicons?domain=" + domain + "&sz=128";
+            } catch (Exception e) {
+                // Fallback will be handled by frontend
+                return null;
+            }
+        }
+        return null;
     }
 
     public void setIconUrl(String iconUrl) {
@@ -157,36 +179,38 @@ public class AITool {
         this.updatedAt = updatedAt;
     }
 
-    public List<HowToUseStep> getHowToUseSteps() {
-        return howToUseSteps;
-    }
-
-    public void setHowToUseSteps(List<HowToUseStep> howToUseSteps) {
-        this.howToUseSteps = howToUseSteps;
-    }
-
-    public List<Pros> getPros() {
-        return pros;
-    }
-
-    public void setPros(List<Pros> pros) {
-        this.pros = pros;
-    }
-
-    public List<Cons> getCons() {
-        return cons;
-    }
-
-    public void setCons(List<Cons> cons) {
-        this.cons = cons;
-    }
-
-    public List<FAQ> getFaqs() {
-        return faqs;
-    }
-
-    public void setFaqs(List<FAQ> faqs) {
-        this.faqs = faqs;
-    }
+    // COMMENTED OUT - Getters/Setters for related entities not needed
+    /*
+     * public List<HowToUseStep> getHowToUseSteps() {
+     * return howToUseSteps;
+     * }
+     * 
+     * public void setHowToUseSteps(List<HowToUseStep> howToUseSteps) {
+     * this.howToUseSteps = howToUseSteps;
+     * }
+     * 
+     * public List<Pros> getPros() {
+     * return pros;
+     * }
+     * 
+     * public void setPros(List<Pros> pros) {
+     * this.pros = pros;
+     * }
+     * 
+     * public List<Cons> getCons() {
+     * return cons;
+     * }
+     * 
+     * public void setCons(List<Cons> cons) {
+     * this.cons = cons;
+     * }
+     * 
+     * public List<FAQ> getFaqs() {
+     * return faqs;
+     * }
+     * 
+     * public void setFaqs(List<FAQ> faqs) {
+     * this.faqs = faqs;
+     * }
+     */
 }
-
