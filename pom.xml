@@ -102,9 +102,17 @@
             <artifactId>caffeine</artifactId>
         </dependency>
 
+        <!-- Caffeine JCache (JSR-107) implementation -->
         <dependency>
             <groupId>com.github.ben-manes.caffeine</groupId>
             <artifactId>jcache</artifactId>
+            <version>3.1.8</version>
+        </dependency>
+
+        <dependency>
+            <groupId>javax.cache</groupId>
+            <artifactId>cache-api</artifactId>
+            <version>1.1.1</version>
         </dependency>
 
         <dependency>
